@@ -39,6 +39,9 @@ public class User implements UserDetails {
         return true;
     }
 
+    public boolean isAdmin() {
+        return roles.contains(Role.ADMIN);
+    }
     @Override
     public boolean isAccountNonLocked() {
         return true;
