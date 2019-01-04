@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ public class User implements UserDetails {
     private String password;
     private boolean active;
 
+    @Email
     private String email;
     private String activationCode;
 
