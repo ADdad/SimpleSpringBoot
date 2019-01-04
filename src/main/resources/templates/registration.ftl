@@ -4,7 +4,6 @@
 <@c.page>
 <div>
    <div class="mb-1">Add new user</div>
-    ${message!}
    <@l.login "/registration" true/>
 </div>
 </@c.page>
