@@ -20,15 +20,15 @@
                     <a class="nav-link" href="/user">User list</a>
                 </li>
             </#if>
-            <@security.authorize access="isAuthenticated()">
+            <#if isAuthenticated>
                 <li class="nav-item">
                     <a class="nav-link" href="/user/profile">Profile</a>
                 </li>
-            </@security.authorize>
+            </#if>
         </ul>
-        <@security.authorize access="isAuthenticated()">
+        <#if isAuthenticated>
             <div class="navbar-text mr-3">${name}</div>
             <@l.logout />
-        </@security.authorize>
+        </#if>
     </div>
 </nav>
