@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
         if (userFromDb != null) {
             return false;
         }
-        user.setActive(true);
+        user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -71,11 +71,10 @@ public class UserService implements UserDetailsService {
 
     public boolean activateUser(String code) {
         User user = userRepo.findByActivationCode(code);
-
         if (user == null) return false;
 
         user.setActivationCode(null);
-
+        user.setActive(true);
         userRepo.save(user);
         return true;
     }
