@@ -12,15 +12,19 @@
             <li class="nav-item">
                 <a class="nav-link" href="/">Home</a>
             </li>
+            <#if isAuthenticated>
             <li class="nav-item">
                 <a class="nav-link" href="/main">Messages</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user-messages/${currentUserId}">My Messages</a>
             </li>
             <#if isAdmin>
                 <li class="nav-item">
                     <a class="nav-link" href="/user">User list</a>
                 </li>
             </#if>
-            <#if isAuthenticated>
+
                 <li class="nav-item">
                     <a class="nav-link" href="/user/profile">Profile</a>
                 </li>
@@ -29,6 +33,12 @@
         <#if isAuthenticated>
             <div class="navbar-text mr-3">${name}</div>
             <@l.logout />
+            <#else>
+                <a href="/login">
+                    <button type="button" class="btn btn-primary">
+                    Login
+                    </button>
+                </a>
         </#if>
     </div>
 </nav>
