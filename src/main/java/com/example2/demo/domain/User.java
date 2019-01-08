@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,6 +30,40 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Message> messages;
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
+    @ManyToMany
+    @JoinTable(
+            name = "user_subscriptions",
+            joinColumns = {@JoinColumn(name = "channel_id")},
+            inverseJoinColumns = {@JoinColumn(name = "subscriber_id")}
+    )
+    private Set<User> subscribers = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "user_subscriptions",
+            joinColumns = {@JoinColumn(name = "subscriber_id")},
+            inverseJoinColumns = {@JoinColumn(name = "channel_id")}
+    )
+    private Set<User> subscriptions = new HashSet<>();
+
+    public Set<User> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(Set<User> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public Set<User> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Set<User> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
 
     public Set<Message> getMessages() {
         return messages;
@@ -54,11 +89,6 @@ public class User implements UserDetails {
         this.activationCode = activationCode;
     }
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
-
     public Long getId() {
         return id;
     }
@@ -68,9 +98,12 @@ public class User implements UserDetails {
     }
 
 
-
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -81,6 +114,7 @@ public class User implements UserDetails {
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
+
     @Override
     public boolean isAccountNonLocked() {
         return true;
@@ -94,10 +128,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActive();
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     @Override
